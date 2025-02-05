@@ -2,4 +2,5 @@
     width: 600px;
     height: 300px;
     margin: 10px;
+    z-index: 10;
 }

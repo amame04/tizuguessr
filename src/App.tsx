@@ -43,11 +43,15 @@ function App() {
     };
   },[]);
 
-  function answerButton() {
+  function answerButton(selected: string) {
+    if (selected == '') {
+      return;
+    }
+
     setPlace({
       ...place,
       isAnswered: true,
-      isCorrect: true
+      isCorrect: place.pref != '不明' && place.pref == selected
     });
   }
 
@@ -64,8 +68,7 @@ function App() {
         <div>{place.isCorrect ? '正解！' : '不正解！'}</div>
         <div>{place.formatedName}</div>
         <Map lat={place.lat} lng={place.lng} isAnswered={place.isAnswered}/>
-        <Answer disabled={true} />
-        <button onClick={answerButton} disabled>回答</button>
+        <Answer answerButton={answerButton} disabled={true} />
       </div>
     );
   } else {
@@ -73,8 +76,7 @@ function App() {
       <div className="App">
         <h1 id='logo'>地図げっさー</h1>
         <Map lat={place.lat} lng={place.lng} isAnswered={place.isAnswered}/>
-        <Answer disabled={false} />
-        <button onClick={answerButton}>回答</button>
+        <Answer answerButton={answerButton} disabled={false} />
       </div>
     )
   }

@@ -58,7 +58,8 @@ function App() {
   if (place.lat == 0 && place.lng == 0 && place.name == '') {
     return (
       <div className="App">
-        loading...
+        <h1 id='logo'>地図げっさー</h1>
+        <div>loading...</div>
       </div>
     );
   } else if (place.isAnswered) {

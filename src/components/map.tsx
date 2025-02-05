@@ -12,6 +12,8 @@ export const Map = ({ lat, lng, isAnswered }: any) => {
   const markerIcon = Leaflet.icon({
     iconUrl: icon,
     shadowUrl: iconShadow,
+    iconSize: [24, 36],
+    iconAnchor: [12, 36],
   });
 
   if (isAnswered) {
@@ -41,7 +43,7 @@ export const Map = ({ lat, lng, isAnswered }: any) => {
         zoomControl={false}
         doubleClickZoom={false}
       >
-        <Marker position={position} icon={markerIcon} />
+        <Marker position={position} icon={markerIcon}/>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build && cp -r dist docs",
+    "rebuild": "tsc -b && vite build && rm -R docs && cp -r dist docs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

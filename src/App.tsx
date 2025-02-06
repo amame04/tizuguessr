@@ -67,7 +67,8 @@ function App() {
       <div className="App">
         <h1 id='logo'>地図げっさー</h1>
         <div className={place.isCorrect ? 'result correct' : 'result'}>
-          {place.isCorrect ? '正解！' : '不正解！'}</div>
+          {place.isCorrect ? '★正解★' : '♡不正解♡'}
+        </div>
         <div className='detail'>{place.formatedName}</div>
         <Map lat={place.lat} lng={place.lng} isAnswered={place.isAnswered}/>
         <Answer answerButton={answerButton} disabled={true} />

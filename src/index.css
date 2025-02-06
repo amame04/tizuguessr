@@ -44,6 +44,7 @@ button, select {
   cursor: pointer;
   transition: border-color 0.25s;
   margin: 5px;
+  height: 3.0rem;
 }
 
 button:hover, select:hover {

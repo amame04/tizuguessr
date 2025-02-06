@@ -8,3 +8,28 @@
   font-weight: 400;
   font-style: normal;
 }
+
+.result {
+  font-family: "Hachi Maru Pop", serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #c29afb;
+  border: solid 2px #c29afb;
+  border-radius: 10px;
+  width: 10rem;
+  font-size: 2rem;
+  margin: 0 auto;
+}
+
+.result.correct {
+  color: #f58b8b;
+  border-color: #f58b8b;
+}
+
+.detail {
+  margin: 0.5rem auto;
+}
+
+.reloadButton {
+  float: right;
+}

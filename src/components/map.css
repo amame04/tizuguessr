@@ -1,5 +1,5 @@
 .leaflet-container {
     width: calc(95vw - 4rem);
     height: 50vh;
-    margin: 2rem;
+    margin: 0.5rem;
 }

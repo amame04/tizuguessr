@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import './App.css'
 import { getPref, getRandomCrossing, reverseGeo, toFormatedName } from './osm';
 import { Map } from './components/map';
@@ -60,7 +60,7 @@ function App() {
     return (
       <div className="App">
         <h1 id='logo'>地図げっさー</h1>
-        <div>loading...</div>
+        <div className='loader'></div>
         <div className={error ? '' : 'none'}>
           <p>エラーが発生しました。</p>
           <ReloadButton />

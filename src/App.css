@@ -30,6 +30,10 @@
   margin: 0.5rem auto;
 }
 
-.reloadButton {
+.answer .reloadButton {
   float: right;
+}
+
+.none {
+  display: none;
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './App.css'
 import { getPref, getRandomCrossing, reverseGeo, toFormatedName } from './osm';
 import { Map } from './components/map';
-import { Answer } from './components/answer';
+import { Answer, ReloadButton } from './components/answer';
 
 function App() {
   const placeObj = {
@@ -16,14 +16,15 @@ function App() {
   }
 
   const [place, setPlace] = useState(placeObj)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     let ignore = false;
 
-      getRandomCrossing().then(latlng => {
+      getRandomCrossing(setError).then(latlng => {
         const lat = parseFloat(latlng.elements[0].lat)
         const lon = parseFloat(latlng.elements[0].lon)
-        reverseGeo(lat, lon).then(name => {
+        reverseGeo(lat, lon, setError).then(name => {
           if (!ignore) {
             setPlace({
               lat: lat,
@@ -60,6 +61,10 @@ function App() {
       <div className="App">
         <h1 id='logo'>地図げっさー</h1>
         <div>loading...</div>
+        <div className={error ? '' : 'none'}>
+          <p>エラーが発生しました。</p>
+          <ReloadButton />
+        </div>
       </div>
     );
   } else if (place.isAnswered) {

@@ -2,6 +2,9 @@
   margin: 0.5rem;
   width: 60vh;
   height: 60vh;
+}
+
+.leaflet-container span {
   color: #333;
 }
 

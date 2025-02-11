@@ -26,12 +26,18 @@ function App() {
         const lon = parseFloat(latlng.elements[0].lon)
         reverseGeo(lat, lon, setError).then(name => {
           if (!ignore) {
+            let pref = getPref(name.display_name);
+            if (pref == null) {
+              location.reload();
+              return
+            }
+
             setPlace({
               lat: lat,
               lng: lon,
               name: name.display_name,
               formatedName: toFormatedName(name.display_name),
-              pref: getPref(name.display_name),
+              pref: pref,
               isCorrect: false,
               isAnswered: false
             });

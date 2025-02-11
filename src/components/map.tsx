@@ -1,6 +1,5 @@
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import Leaflet, { LatLng } from 'leaflet';
-import './map.css';
 import 'leaflet/dist/leaflet.css';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';

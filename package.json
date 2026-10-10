@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "node --test src/*.test.mjs",
+    "data:validate": "node scripts/validate-data.mjs",
     "dev": "vite",
     "build": "tsc -b && vite build && node scripts/sync-docs.mjs",
     "rebuild": "npm run build",

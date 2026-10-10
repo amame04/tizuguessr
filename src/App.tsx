@@ -1,99 +1,73 @@
 import { useEffect, useState } from 'react';
-import './App.css'
-import { getPref, getRandomCrossing, reverseGeo, toFormatedName } from './osm';
+import './App.css';
+import { getRandomCrossing } from './crossings';
+import type { Crossing } from './crossings';
 import { Map } from './components/map';
-import { Answer, ReloadButton } from './components/answer';
+import { Answer, NextQuestionButton } from './components/answer';
 
 function App() {
-  const placeObj = {
-    lat: 0,
-    lng: 0,
-    name: '',
-    formatedName: '',
-    pref: '',
-    isCorrect: false,
-    isAnswered: false
-  }
-
-  const [place, setPlace] = useState(placeObj)
-  const [error, setError] = useState(false)
+  const [place, setPlace] = useState<Crossing | null>(null);
+  const [error, setError] = useState(false);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [question, setQuestion] = useState(0);
 
   useEffect(() => {
     let ignore = false;
-
-      getRandomCrossing(setError).then(latlng => {
-        const lat = parseFloat(latlng.elements[0].lat)
-        const lon = parseFloat(latlng.elements[0].lon)
-        reverseGeo(lat, lon, setError).then(name => {
-          if (!ignore) {
-            const pref = getPref(name?.address);
-            if (pref == null) {
-              setError(true);
-              return
-            }
-
-            setPlace({
-              lat: lat,
-              lng: lon,
-              name: name.display_name,
-              formatedName: toFormatedName(name.display_name),
-              pref: pref,
-              isCorrect: false,
-              isAnswered: false
-            });
-          }
-        })
-      });
-
-    return () => {
-      ignore = true;
-    };
-  },[]);
-
-  function answerButton(selected: string) {
-    if (selected == '') {
-      return;
-    }
-
-    setPlace({
-      ...place,
-      isAnswered: true,
-      isCorrect: place.pref != '不明' && place.pref == selected
+    getRandomCrossing().then(crossing => {
+      if (!ignore) setPlace(crossing);
+    }).catch(error => {
+      if (!ignore) {
+        console.error(error);
+        setError(true);
+      }
     });
+    return () => { ignore = true; };
+  }, [question]);
+
+  function nextQuestion() {
+    setPlace(null);
+    setSelected(null);
+    setError(false);
+    setQuestion(current => current + 1);
   }
 
-  if (place.lat == 0 && place.lng == 0 && place.name == '') {
-    return (
-      <div className="App">
-        <h1 id='logo'>地図げっさー</h1>
-        <div className='loader'></div>
-        <div className={error ? '' : 'none'}>
-          <p>エラーが発生しました。</p>
-          <ReloadButton />
-        </div>
-      </div>
-    );
-  } else if (place.isAnswered) {
-    return (
-      <div className="App">
-        <h1 id='logo'>地図げっさー</h1>
-        <div className={place.isCorrect ? 'result correct' : 'result'}>
-          {place.isCorrect ? '★ 正解 ★' : '♡不正解♡'}
-        </div>
-        <div className='detail'>{place.formatedName}</div>
-        <Map lat={place.lat} lng={place.lng} isAnswered={place.isAnswered}/>
-        <Answer answerButton={answerButton} disabled={true} />
-      </div>
-    );
-  } else {
-    return (
-      <div className="App">
-        <h1 id='logo'>地図げっさー</h1>
-        <Map lat={place.lat} lng={place.lng} isAnswered={place.isAnswered}/>
-        <Answer answerButton={answerButton} disabled={false} />
-      </div>
-    )
+  function answerButton(answer: string) {
+    if (answer !== '' && place && selected === null) setSelected(answer);
   }
+
+  if (!place) {
+    return (
+      <div className="App">
+        <h1 id="logo">地図げっさー</h1>
+        {error ? (
+          <div role="alert">
+            <p>問題を読み込めませんでした。</p>
+            <NextQuestionButton onClick={nextQuestion} label="再試行" />
+          </div>
+        ) : <div className="loader" />}
+      </div>
+    );
+  }
+
+  const isAnswered = selected !== null;
+  const isCorrect = selected === place.pref;
+  return (
+    <div className="App">
+      <h1 id="logo">地図げっさー</h1>
+      {isAnswered && (
+        <>
+          <div className={isCorrect ? 'result correct' : 'result'}>
+            {isCorrect ? '★ 正解 ★' : '♡不正解♡'}
+          </div>
+          <div className="detail">
+            {place.pref}（{place.lat.toFixed(7)}, {place.lng.toFixed(7)}）
+          </div>
+        </>
+      )}
+      <Map key={`${question}-${isAnswered}`} lat={place.lat} lng={place.lng} isAnswered={isAnswered} />
+      <Answer key={question} answerButton={answerButton} disabled={isAnswered} onNext={nextQuestion} />
+    </div>
+  );
 }
 
 export default App;

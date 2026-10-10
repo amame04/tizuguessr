@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 
+# Local OSM source extracts and Python data-generation environment
+*.osm.pbf
+.venv-data/
+__pycache__/
+public/.crossings-*/
+public/data.backup/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

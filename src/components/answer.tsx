@@ -1,6 +1,18 @@
 import { useState } from "react"
 import { prefectures } from "../crossings";
 
+// 都道府県コード順の一覧を地方別に区切る（三重県は近畿）。
+const regions = [
+  { name: '北海道', prefectures: prefectures.slice(0, 1) },
+  { name: '東北', prefectures: prefectures.slice(1, 7) },
+  { name: '関東', prefectures: prefectures.slice(7, 14) },
+  { name: '中部', prefectures: prefectures.slice(14, 23) },
+  { name: '近畿', prefectures: prefectures.slice(23, 30) },
+  { name: '中国', prefectures: prefectures.slice(30, 35) },
+  { name: '四国', prefectures: prefectures.slice(35, 39) },
+  { name: '九州・沖縄', prefectures: prefectures.slice(39, 47) },
+];
+
 interface AnswerProps {
   answerButton: (selected: string) => void;
   disabled: boolean;
@@ -11,12 +23,16 @@ export function Answer({ answerButton, disabled, onNext } : AnswerProps) {
   const [selected, setSelected] = useState('');
 
   return <div className="answer">
-    <select value={selected} onChange={(e) => setSelected(e.target.value)} disabled={disabled}>
+    <select aria-label="都道府県" value={selected} onChange={(e) => setSelected(e.target.value)} disabled={disabled}>
         <option value="">未選択</option>
 
-        {prefectures.map((prefecture) => {
-          return <option key={prefecture} value={prefecture}>{prefecture}</option>;
-        })}
+        {regions.map(region => (
+          <optgroup key={region.name} label={region.name}>
+            {region.prefectures.map(prefecture => (
+              <option key={prefecture} value={prefecture}>{prefecture}</option>
+            ))}
+          </optgroup>
+        ))}
       </select>
       <button onClick={() => {answerButton(selected)}} disabled={disabled}>回答</button>
       <NextQuestionButton onClick={onNext} label={disabled ? '次の問題' : '別の問題'} />

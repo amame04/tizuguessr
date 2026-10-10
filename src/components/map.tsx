@@ -4,7 +4,12 @@ import 'leaflet/dist/leaflet.css';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
-export const Map = ({ lat, lng, isAnswered }: any) => {
+interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
+export const Map = ({ lat, lng, isAnswered }: Coordinates & { isAnswered: boolean }) => {
   const position = new LatLng(lat, lng);
   const zoom = 16;
 
@@ -52,7 +57,7 @@ export const Map = ({ lat, lng, isAnswered }: any) => {
   } 
 };
 
-export const AnswerMap = ({ lat, lng }: any) => {
+export const AnswerMap = ({ lat, lng }: Coordinates) => {
   const position = new LatLng(lat, lng);
   const zoom = 16;
 

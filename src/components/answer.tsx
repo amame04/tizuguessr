@@ -1,14 +1,19 @@
 import { useState } from "react"
 import { prefectures } from "../osm";
 
-export function Answer({ answerButton, disabled } : any) {
+interface AnswerProps {
+  answerButton: (selected: string) => void;
+  disabled: boolean;
+}
+
+export function Answer({ answerButton, disabled } : AnswerProps) {
   const [selected, setSelected] = useState('');
 
   return <div className="answer">
-    <select value={selected} onChange={(e:any) => setSelected(e.target.value)} disabled={disabled}>
+    <select value={selected} onChange={(e) => setSelected(e.target.value)} disabled={disabled}>
         <option value="">未選択</option>
 
-        {prefectures.map((prefecture, _) => {
+        {prefectures.map((prefecture) => {
           return <option key={prefecture} value={prefecture}>{prefecture}</option>;
         })}
       </select>

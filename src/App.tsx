@@ -26,9 +26,9 @@ function App() {
         const lon = parseFloat(latlng.elements[0].lon)
         reverseGeo(lat, lon, setError).then(name => {
           if (!ignore) {
-            let pref = getPref(name.display_name);
+            const pref = getPref(name?.address);
             if (pref == null) {
-              location.reload();
+              setError(true);
               return
             }
 

@@ -1,4 +1,4 @@
-export async function getRandomCrossing(setError: Function) {
+export async function getRandomCrossing(setError: (error: boolean) => void) {
   const text = await fetch('./data/crossing.txt')
     .then((response) => {
       return response.text();
@@ -20,7 +20,7 @@ export async function getRandomCrossing(setError: Function) {
   return await sendQuery(query, setError);
 }
 
-async function sendQuery(query: string, setError: Function) {
+async function sendQuery(query: string, setError: (error: boolean) => void) {
   const overpass = 'https://overpass-api.de/api/interpreter';
   const url = overpass + '?data=[out:json][timeout:30];' + query;
 
@@ -36,9 +36,9 @@ async function sendQuery(query: string, setError: Function) {
   return data;
 }
 
-export async function reverseGeo(lat: number, lng: number, setError: Function) {
+export async function reverseGeo(lat: number, lng: number, setError: (error: boolean) => void) {
   const nominatim = 'https://nominatim.openstreetmap.org/reverse'
-  const url = nominatim + '?format=json&lat=' + lat + '&lon=' + lng
+  const url = nominatim + '?format=json&addressdetails=1&accept-language=ja&lat=' + lat + '&lon=' + lng
 
   const data = await fetch(url)
     .then((response) => {
@@ -52,19 +52,20 @@ export async function reverseGeo(lat: number, lng: number, setError: Function) {
   return data;
 }
 
-export function getPref(name: string) {
-  const splitedName = String(name).split(", ");
-  let pref = null;
+interface Address {
+  country_code?: string;
+  state?: string;
+  province?: string;
+}
 
-  if (splitedName.length >= 3) {
-    pref = splitedName[splitedName.length - 3];
-    
-    if (!prefectures.includes(pref)) {
-      pref == null
-    }
-  }
+export function getPref(address?: Address | null) {
+  if (address?.country_code !== 'jp') return null;
 
-  return pref;
+  const candidates = [address.state, address.province].filter(
+    (value): value is string => typeof value === 'string' && prefectures.includes(value)
+  );
+  const unique = [...new Set(candidates)];
+  return unique.length === 1 ? unique[0] : null;
 }
 
 export function toFormatedName(name: string) {
